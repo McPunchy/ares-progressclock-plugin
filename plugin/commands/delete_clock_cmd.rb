@@ -13,15 +13,15 @@ module AresMUSH
 
     def handle
       if self.scene_id
-        clock = Clock.find_one_by_name_and_scene_id(self.name, self.scene_id)
+        clock = Clock.find_one_by_name_scene_id_and_creator_id(self.name, self.scene_id, enactor.name)
       else
-        clock = Clock.find_one_by_name_and_creator(self.name, enactor)
+        clock = Clock.find_one_by_name_and_creator_id(self.name, enactor.name)
       end
 
       if !clock && enactor.has_permission?("control_npcs")
         clocks = Clock.find_by_name(self.name)
         if clocks.size > 1
-          list = clocks.map { |c| "#{c.name} - #{c.creator.name} - #{c.scene_id}" }.join("\n")
+          list = clocks.map { |c| "#{c.name} - #{c.creator_id} - #{c.scene_id}" }.join("\n")
           client.emit_failure t('progress_clocks.multiple_clocks_found', list: list)
           return
         else
@@ -34,7 +34,7 @@ module AresMUSH
         return
       end
 
-      if enactor != clock.creator && !enactor.has_permission?("control_npcs")
+      if enactor != clock.creator_id && !enactor.has_permission?("control_npcs")
         client.emit_failure t('dispatcher.not_allowed')
         return
       end

@@ -17,13 +17,23 @@ module AresMUSH
         def handle
           target = Character.named(self.target_name) || enactor
           clocks = Clock.owned_by(target)
+
+          # Debugging information:
+          Global.logger.debug "Target: #{target}"
+          Global.logger.debug "Clocks: #{clocks.to_a}"
   
           if clocks.empty?
             client.emit_failure t('progress_clocks.no_clocks_found')
             return
           end
   
-          list = clocks.map { |c| "#{c.name} - #{c.scene_id}" }.join("\n")
+          list = clocks.map do |c| 
+            if c.type.downcase == 'scene'
+              "#{c.name} (#{c.type}) - Scene ID: #{c.scene_id}"
+            else
+              "#{c.name} (#{c.type})"
+            end
+          end.join("\n")
           client.emit_success t('progress_clocks.clocks_list', list: list)
         end
       end

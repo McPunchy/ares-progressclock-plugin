@@ -66,6 +66,9 @@ module AresMUSH
           client.emit_success message
         else
           enactor_room.emit message
+          if (enactor_room.scene)
+            Scenes.add_to_scene(enactor_room.scene, message)
+          end
         end
       end
 
