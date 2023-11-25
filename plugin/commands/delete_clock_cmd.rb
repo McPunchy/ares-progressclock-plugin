@@ -1,5 +1,6 @@
-module ProgressClocks
-  class DeleteClockCmd
+module AresMUSH
+  module ProgressClocks
+    class DeleteClockCmd
     include CommandHandler
 
     attr_accessor :name
