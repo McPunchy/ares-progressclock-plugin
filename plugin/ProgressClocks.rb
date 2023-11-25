@@ -9,6 +9,10 @@ module AresMUSH
       def self.shortcuts
         Global.read_config("progress_clocks", "shortcuts")
       end
+
+      def self.version
+        "0.1"
+      end
   
       def self.get_cmd_handler(client, cmd, enactor)
         case cmd.root
