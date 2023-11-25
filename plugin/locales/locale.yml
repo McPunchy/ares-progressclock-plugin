@@ -1,6 +1,6 @@
 en:
   progress_clocks:
-    clock_created: "%{creator} has started Clock: %{name}! %{display}"
+    clock_created: "%{creator} has started a Clock: %{name}! %{display}"
     clock_created_log: "Clock %{name} created by %{creator}"
     invalid_clock_size: "Invalid clock size. Allowed sizes are %{allowed_sizes}."
     clock_not_found: "Clock '%{name}' not found."

@@ -13,7 +13,7 @@ module AresMUSH
         clock = Clock.find_one_by_clock_uid(self.clock_uid)
         if clock.nil?
           client.emit_failure("No clock found with this UID.")
-        elsif !clock.owned_by?(enactor) && !enactor.has_permission?("control_npcs")
+        elsif clock.creator_id != enactor.name && !enactor.has_permission?("control_npcs")
           client.emit_failure("You are not the owner of this clock.")
         else
           clock.delete

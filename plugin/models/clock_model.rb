@@ -33,7 +33,7 @@ module AresMUSH
 
       def display_for_client
         filled = 'X' * self.current_value
-        unfilled = '-' * (self.max_value - self.current_value)
+        unfilled = '-' * (self.max_value.to_i - self.current_value)
         "#{filled}#{unfilled}"
       end
 
