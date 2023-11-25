@@ -1,0 +1,13 @@
+en:
+  progress_clocks:
+    clock_created: "%{creator} has started Clock: %{name}! %{display}"
+    clock_created_log: "Clock %{name} created by %{creator}"
+    invalid_clock_size: "Invalid clock size. Allowed sizes are %{allowed_sizes}."
+    clock_not_found: "Clock '%{name}' not found."
+    clock_updated: "Clock '%{name}' advances! %{display}"
+    current_value_exceeds_max: "Current value cannot exceed the max value."
+    clock_updated_log: "Clock '%{name}' updated by %{creator}."
+    clock_already_exists: "A clock with the same type and scene ID already exists: '%{name}'."
+    multiple_clocks_found: "Multiple clocks found:\n%{list}"
+    no_clocks_found: "No clocks found."
+    clocks_list: "Clocks:\n%{list}"

@@ -33,6 +33,8 @@ module AresMUSH
           return ClockUpdatedEventHandler
         when "ClockDeletedEvent"
           return ClockDeletedEventHandler
+        when "ClocksListedEvent"
+          return ClocksListedEventHandler
         end
         return nil
       end
@@ -47,8 +49,19 @@ module AresMUSH
           return UpdateClockRequestHandler
         when "deleteClock"
           return DeleteClockRequestHandler
+        when "getClocksList"
+          return GetClocksListRequestHandler
         end
         return nil
       end
+
+      def self.emit_clockmessage(message, client, enactor_room, private)
+        if (private)
+          client.emit_success message
+        else
+          enactor_room.emit message
+        end
+      end
+
     end
   end

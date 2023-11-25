@@ -1,0 +1,4 @@
+---
+progress_clocks:
+  allowed_sizes: [4, 6, 8]
+  
