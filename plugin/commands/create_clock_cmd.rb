@@ -6,11 +6,11 @@ module AresMUSH
       attr_accessor :name, :max_value, :current_value, :scene_id, :type, :private
 
       def parse_args
-        args = cmd.args.match(/(\w+)?\s+"([^"]+)"\s+(\d+)\s+(\d+)/)
+        args = cmd.args.match(/(\w+)?\s+"([^"]+)"\s+(\d+)(?:\s+(\d+))?/)
         self.type = args[1] || 'NoType'
         self.name = args[2]
-        self.current_value = args[3].to_i
-        self.max_value = args[4].to_i
+        self.current_value = args[4] ? args[3].to_i : 0
+        self.max_value = args[4] ? args[4].to_i : args[3].to_i
         self.private = cmd.switch_is?("private")
       
         if self.max_value < self.current_value
@@ -39,7 +39,7 @@ module AresMUSH
         ProgressClocks.emit_clockmessage(message, client, enactor_room, self.private)
         Global.logger.info t('progress_clocks.clock_created_log', name: clock.name, creator: enactor_name)
       end
-      end
+
     end
   end
 end
