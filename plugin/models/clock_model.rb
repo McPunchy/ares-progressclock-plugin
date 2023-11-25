@@ -1,6 +1,8 @@
 module AresMUSH
     module ProgressClocks
       class Clock < Ohm::Model
+        include Ohm::DataTypes
+        
         attribute :name
         attribute :max_value
         attribute :current_value
