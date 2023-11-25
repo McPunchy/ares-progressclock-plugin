@@ -44,3 +44,5 @@ def parse_args
     clock.delete
     client.emit_success t('progress_clocks.clock_deleted', name: self.name)
   end
+end
+ 
