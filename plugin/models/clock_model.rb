@@ -7,14 +7,24 @@ module AresMUSH
       attribute :creator_id
       attribute :type
       attribute :scene_id
+      attribute :clock_uid
 
       index :name
       index :creator_id
       index :type
       index :scene_id
+      index :clock_uid
 
-      def self.find_one_by_creator_type_and_scene_id(creator_id, type, scene_id)  
-        find(creator_id: creator_id, type: type, scene_id: scene_id).first
+      def self.max_uid
+        all.map(&:clock_uid).max
+      end
+
+      def self.check_duplicate_clocks(name, creator_id, scene_id)
+        find(name: name, creator_id: creator_id, scene_id: scene_id).first
+      end
+
+      def self.find_one_by_clock_uid(clock_uid)
+        find(clock_uid: clock_uid).first
       end
 
       def self.owned_by(character)

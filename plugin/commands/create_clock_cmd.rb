@@ -32,7 +32,8 @@ module AresMUSH
           return
         end
 
-        existing_clock = Clock.find_one_by_creator_type_and_scene_id(enactor.name, self.type, self.scene_id)
+        creator_id = enactor.name
+        existing_clock = Clock.check_duplicate_clocks(self.name, creator_id, self.scene_id)
         if existing_clock
           client.emit_failure t('progress_clocks.clock_already_exists', name: existing_clock.name)
           return
@@ -43,7 +44,8 @@ module AresMUSH
         end
         
 
-        clock = Clock.create(name: self.name, max_value: self.max_value, current_value: self.current_value, creator_id: enactor.name, scene_id: self.scene_id, type: self.type)
+        new_uid = Clock.max_uid ? Clock.max_uid + 1 : 1
+        clock = Clock.create(clock_uid: new_uid, name: self.name, max_value: self.max_value, current_value: self.current_value, creator_id: creator_id, scene_id: self.scene_id, type: self.type)
         Global.logger.debug "Created clock: #{clock.inspect}"
         Global.logger.debug "Creator: #{clock.creator_id}"
         display = clock.display_for_client

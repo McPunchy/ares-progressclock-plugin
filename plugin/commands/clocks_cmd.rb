@@ -29,9 +29,9 @@ module AresMUSH
   
           list = clocks.map do |c| 
             if c.type.downcase == 'scene'
-              "#{c.name} (#{c.type}) - Scene ID: #{c.scene_id}"
+              "#{c.clock_uid}: #{c.name} (#{c.type}) - Scene ID: #{c.scene_id} - Progress: #{c.current_value}/#{c.max_value}"
             else
-              "#{c.name} (#{c.type})"
+              "#{c.clock_uid}: #{c.name} (#{c.type}) - Progress: #{c.current_value}/#{c.max_value}"
             end
           end.join("\n")
           client.emit_success t('progress_clocks.clocks_list', list: list)

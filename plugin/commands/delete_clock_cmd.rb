@@ -1,47 +1,25 @@
 module AresMUSH
   module ProgressClocks
     class DeleteClockCmd
-    include CommandHandler
+      include CommandHandler
 
-    attr_accessor :name
+      attr_accessor :clock_uid
 
-    def parse_args
-      args = cmd.args.match(/"([^"]+)"\s*(\d*)/)
-      self.name = args[1]
-      self.scene_id = args[2].empty? ? nil : args[2].to_i
-    end
-
-    def handle
-      if self.scene_id
-        clock = Clock.find_one_by_name_scene_id_and_creator_id(self.name, self.scene_id, enactor.name)
-      else
-        clock = Clock.find_one_by_name_and_creator_id(self.name, enactor.name)
+      def parse_args
+        self.clock_uid = cmd.args.to_i
       end
 
-      if !clock && enactor.has_permission?("control_npcs")
-        clocks = Clock.find_by_name(self.name)
-        if clocks.size > 1
-          list = clocks.map { |c| "#{c.name} - #{c.creator_id} - #{c.scene_id}" }.join("\n")
-          client.emit_failure t('progress_clocks.multiple_clocks_found', list: list)
-          return
+      def handle
+        clock = Clock.find_one_by_clock_uid(self.clock_uid)
+        if clock.nil?
+          client.emit_failure("No clock found with this UID.")
+        elsif !clock.owned_by?(enactor) && !enactor.has_permission?("control_npcs")
+          client.emit_failure("You are not the owner of this clock.")
         else
-          clock = clocks.first
+          clock.delete
+          client.emit_success("Clock deleted.")
         end
       end
-
-      if !clock
-        client.emit_failure t('progress_clocks.clock_not_found', name: self.name)
-        return
-      end
-
-      if enactor != clock.creator_id && !enactor.has_permission?("control_npcs")
-        client.emit_failure t('dispatcher.not_allowed')
-        return
-      end
-
-      clock.delete
-      client.emit_success t('progress_clocks.clock_deleted', name: self.name)
     end
   end
-end
 end
