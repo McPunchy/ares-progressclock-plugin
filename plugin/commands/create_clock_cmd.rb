@@ -24,9 +24,10 @@ module AresMUSH
       end
 
       def handle
-        allowed_sizes = Global.read_config("progress_clocks", "allowed_sizes")
+        config = Global.read_config("progress_clocks")
         
-        if !allowed_sizes.include?(self.max_value)
+        if !config["size_#{self.max_value}"]
+          allowed_sizes = config.keys.select { |k| k.start_with?('size_') }.map { |k| k[5..] }
           client.emit_failure t('progress_clocks.invalid_clock_size', allowed_sizes: allowed_sizes.join(", "))
           return
         end
