@@ -7,14 +7,19 @@ module AresMUSH
 
       def parse_args
         args = cmd.args.match(/(\w+)?\s+"([^"]+)"\s+(\d+)(?:\s+(\d+))?/)
-        self.type = args[1] || 'NoType'
-        self.name = args[2]
-        self.current_value = args[4] ? args[3].to_i : 0
-        self.max_value = args[4] ? args[4].to_i : args[3].to_i
-        self.private = cmd.switch_is?("private")
-      
-        if self.max_value < self.current_value
-          self.max_value, self.current_value = self.current_value, self.max_value
+        
+        if args
+          self.type = args[1] || 'NoType'
+          self.name = args[2]
+          self.current_value = args[4] ? args[3].to_i : 0
+          self.max_value = args[4] ? args[4].to_i : args[3].to_i
+          self.private = cmd.switch_is?("private")
+        
+          if self.max_value < self.current_value
+            self.max_value, self.current_value = self.current_value, self.max_value
+          end
+        else
+          client.emit_failure "Invalid arguments. Expected format: [type] \"name\" current_value [max_value]"
         end
       end
 
