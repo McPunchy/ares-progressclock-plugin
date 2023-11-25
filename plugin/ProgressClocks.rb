@@ -11,7 +11,7 @@ module AresMUSH
       end
 
       def self.version
-        "0.1"
+        "0.1a"
       end
   
       def self.get_cmd_handler(client, cmd, enactor)
