@@ -24,6 +24,10 @@ module AresMUSH
       end
 
       def handle
+          unless enactor.is_approved?
+            client.emit_failure "You are not allowed to perform this action."
+            return
+          end
         config = Global.read_config("progress_clocks")
         
         if !config["size_#{self.max_value}"]
