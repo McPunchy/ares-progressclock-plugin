@@ -40,7 +40,7 @@ module AresMUSH
         when "ClockDeletedEvent"
           return ClockDeletedEventHandler
         when "ClocksListedEvent"
-          return ClocksListedEventHandler
+          return ClockListedEventHandler
         end
         return nil
       end
@@ -48,7 +48,7 @@ module AresMUSH
       def self.get_web_request_handler(request)
         case request.cmd
         when "getClocks"
-          return GetClocksRequestHandler
+          return GetClockRequestHandler
         when "createClock"
           return CreateClockRequestHandler
         when "updateClock"
@@ -56,7 +56,7 @@ module AresMUSH
         when "deleteClock"
           return DeleteClockRequestHandler
         when "getClocksList"
-          return GetClocksListRequestHandler
+          return GetClockListRequestHandler
         end
         return nil
       end
@@ -67,6 +67,10 @@ module AresMUSH
         else
           enactor_room.emit message
           if (enactor_room.scene)
+            if !Scenes.can_pose_char?(enactor, char)
+              client.emit_success message
+              return { error: "#{t('dispatcher.not_allowed')} The clock was updated, but there was an error sending to scene." }
+            end
             Scenes.add_to_scene(enactor_room.scene, message)
           end
         end
